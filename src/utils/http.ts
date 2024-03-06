@@ -1,13 +1,13 @@
 import { useMemberStore } from '@/stores'
 
-const baseUrl = 'https://pcapi-xiaotuxian-front-devtest.itheima.net'
+const baseUrl = `http://lackofcsy.cn:9000`
 
 // 添加拦截器
 const httpInterceptor = {
   // 拦截前触发
   invoke(options: UniApp.RequestOptions) {
     // 非http开头拼接地址
-    if (!options.url.startsWith('http')) {
+    if (!options.url.startsWith('http://')) {
       options.url = baseUrl + options.url
     }
     // 请求超时.默认60s
@@ -23,30 +23,28 @@ const httpInterceptor = {
     if (token) {
       options.header.Authorization = token
     }
-    console.log(options.header)
-    console.log('test')
   },
 }
 uni.addInterceptor('request', httpInterceptor)
 uni.addInterceptor('uploadFile', httpInterceptor)
 
 interface Data<T> {
-  code: string
+  code: Number
   msg: string
   result: T
 }
 // 添加类型支持泛型
 export const http = <T>(options: UniApp.RequestOptions) => {
+  // console.log(options)
+
   return new Promise<Data<T>>((resolve, reject) => {
     uni.request({
       ...options,
-      // 请求成功
+      // 请求成功0
       success(res) {
-        console.log(res)
-
-        if (res.statusCode >= 200 && res.statusCode < 300) {
+        if (res.statusCode >= 200 && res.statusCode < 300 && (res.data as Data<T>).code == 200) {
           resolve(res.data as Data<T>)
-        } else if (res.statusCode === 401) {
+        } else if ((res.data as Data<T>).code === 401) {
           // 401清理用户信息,跳转登录页
           const meberStore = useMemberStore()
           meberStore.clearProfile()
@@ -58,6 +56,7 @@ export const http = <T>(options: UniApp.RequestOptions) => {
             icon: 'none',
             title: (res.data as Data<T>).msg || '请求错误',
           })
+          reject(res)
         }
       },
       fail(error) {

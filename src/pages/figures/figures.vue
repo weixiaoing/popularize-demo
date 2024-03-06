@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <view class="category">category</view>
+  <uni-card><text>这是推广</text> </uni-card>
 </template>
 
 <style lang="scss">

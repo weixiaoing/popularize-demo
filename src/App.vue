@@ -13,9 +13,11 @@ onHide(() => {
 </script>
 
 <style lang="scss">
-// 字体图标
-@import '@/styles/fonts.scss';
-
+page {
+  background-color: rgb(240, 240, 240);
+  padding: 2px 0px 10px;
+  position: relative;
+}
 view,
 navigator,
 input,
