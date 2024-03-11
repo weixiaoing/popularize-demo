@@ -1,3 +1,64 @@
+<script lang="ts" setup>
+import { searchKeyAPI } from '@/services/pagesAPI'
+import type { keyDeatils } from '@/types'
+import { onShow } from '@dcloudio/uni-app'
+import { computed, onMounted, ref, watch } from 'vue'
+let list = ref<keyDeatils[]>([])
+let ifshow = computed(() => {
+  if (list.value.length) {
+    console.log('yes')
+    return false
+  } else {
+    console.log('no')
+
+    return true
+  }
+})
+let searchValue = ref('')
+let selectedValue = ref(0)
+let range = ref([
+  { value: 0, text: '全部' },
+  { value: 1, text: '审核中' },
+  { value: 2, text: '已通过' },
+  { value: 3, text: '已驳回' },
+  { value: 4, text: '已取消' },
+  { value: 5, text: '已发布' },
+  { value: 6, text: '已失效' },
+])
+const buttonType = (value: number) => {
+  if ([1, 2, 5].includes(value)) return 'success '
+  else return 'error'
+}
+const change = (value: number) => {
+  selectedValue.value = value
+  sendSearch()
+}
+const sendSearch = async () => {
+  if (selectedValue.value === 0) {
+    const res = await searchKeyAPI({ keyName: searchValue.value, keyStatus: [0, 1, 2, 3, 4, 5] })
+    list.value = res.data
+  } else {
+    let keyStatus = [selectedValue.value - 1]
+    const res = await searchKeyAPI({
+      keyName: searchValue.value,
+      keyStatus,
+    })
+    list.value = res.data
+  }
+}
+
+onShow(() => {
+  sendSearch()
+})
+
+const goKeyCreate = () => {
+  uni.navigateTo({ url: '/pages/keyCreate/keyCreate' })
+}
+
+const goDetails = (id: number) => {
+  uni.navigateTo({ url: `/pages/key/key?id=${id}` })
+}
+</script>
 <template>
   <view class="buttonContainer">
     <button
@@ -15,60 +76,44 @@
       bgColor="#f8f8f8"
       cancelButton="none"
       v-model="searchValue"
-      @confirm="sendSearch"
+      @confirm="sendSearch()"
     />
   </view>
 
   <scroll-view style="overflow: hidden; height: 70vh" scroll-y :show-scrollbar="false">
-    <view class="card" @click="goDetails" v-for="item in array" :key="item">
+    <view v-if="ifshow" class="noshow"><text>暂无数据</text></view>
+    <view class="card" @click="goDetails(item.id)" v-for="item in list" :key="item.id">
       <view class="between"
         ><view class="title"
-          ><text>{{ '书名' }}</text>
-          <uni-tag text="已发布" size="small" type="primary" :circle="true" /></view
-        ><view class="extra">{{ '发布回填' }}<uni-icons type="right" size="14" /></view
+          ><text>{{ item.keyword }}</text>
+          <uni-tag
+            class="tag"
+            :text="range[item.keywordStatus + 1].text"
+            size="small"
+            :type="`${buttonType(item.keywordStatus + 1)}`as any"
+            :circle="true" /></view
+        ><view class="extra"
+          >{{ item.keywordStatus == 1 || item.keywordStatus == 4 ? '发布回填' : ''
+          }}<uni-icons type="right" size="14" /></view
       ></view>
       <view class="between" style="font-size: 13px; color: grey"
-        ><view class="book"
-          >书名:{{ '你好, 这是书名测试溢出啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊' }}</view
-        ><view class="time">发布时间:{{ '2022.1.1' }}</view></view
+        ><view class="book">书名:{{ item.bookName }}</view
+        ><view class="time">发布时间:{{ item.applicationTime.split(' ')[0] }}</view></view
       >
     </view>
   </scroll-view>
+
   <button style="margin: 10px; background-color: #007aff" :disabled="false" @click="goKeyCreate">
     <text style="color: white">创建关键词</text>
   </button>
 </template>
 
-<script lang="ts" setup>
-import { ref } from 'vue'
-let array = new Array(10).fill(1).map((item, index) => index)
-let searchValue = ref('')
-let selectedValue = ref(0)
-let range = ref([
-  { value: 0, text: '全部' },
-  { value: 1, text: '审核中' },
-  { value: 2, text: '已驳回' },
-  { value: 3, text: '已取消' },
-  { value: 4, text: '已发布' },
-  { value: 5, text: '已失效' },
-])
-const change = (value: number) => {
-  selectedValue.value = value
-}
-const sendSearch = () => {
-  console.log('test')
-}
-
-const goKeyCreate = () => {
-  uni.navigateTo({ url: '/pages/keyCreate/keyCreate' })
-}
-
-const goDetails = () => {
-  uni.navigateTo({ url: '/pages/key/key' })
-}
-</script>
-
 <style lang="scss" scoped>
+.noshow {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .between {
   display: flex;
   width: 100%;
@@ -121,9 +166,18 @@ const goDetails = () => {
   display: flex;
   align-items: center;
   justify-content: center;
+  .tag {
+    margin-top: -5px;
+  }
+  text {
+    max-width: 200px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
 }
 .book {
-  width: 60%;
+  width: 50%;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;

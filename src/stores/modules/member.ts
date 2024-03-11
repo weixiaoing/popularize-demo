@@ -37,6 +37,5 @@ export const useMemberStore = defineStore(
         },
       },
     },
-    // persist: true,
   },
 )

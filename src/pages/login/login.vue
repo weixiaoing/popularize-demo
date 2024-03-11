@@ -1,15 +1,44 @@
 <script setup lang="ts">
 import { loginAPI } from '@/services/userAPI'
+import { useMemberStore } from '@/stores'
 import { ref } from 'vue'
 
-let email = ref('2218407970@qq.com')
-let password = ref('12345')
-console.log('test1')
+let email = ref('')
+let password = ref('')
+
+const MemberStore = useMemberStore()
+MemberStore.setProfile(null)
 
 const login = async () => {
+  if (!email.value) {
+    uni.showToast({
+      title: '请输入邮箱',
+      icon: 'none',
+      duration: 2000,
+    })
+    return
+  }
+  if (!password.value) {
+    uni.showToast({
+      title: '请输入密码',
+      icon: 'none',
+      duration: 2000,
+    })
+    return
+  }
+
   const res = await loginAPI(email.value, password.value)
-  console.log(email.value, password.value)
-  console.log(res)
+  if (res.code === 200) {
+    MemberStore.setProfile(res.data)
+    uni.reLaunch({
+      url: '/pages/announcement/announcement',
+    })
+    uni.showToast({
+      title: '登录成功',
+      icon: 'success',
+      duration: 2000,
+    })
+  }
 }
 
 const goregister = () => {

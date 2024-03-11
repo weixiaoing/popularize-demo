@@ -1,19 +1,31 @@
 <script setup lang="ts">
+import { getProjectList } from '@/services/pagesAPI'
+import type { novelEaringType, novelPopularizeType } from '@/types'
+import { onLoad } from '@dcloudio/uni-app'
+import { ref } from 'vue'
+
 //
-let array = new Array(10).fill(1).map((item, index) => index)
+
 const goKeyWords = () => {
   uni.navigateTo({ url: '/pages/keyWords/keyWords' })
 }
+let list = ref<novelPopularizeType[]>([])
+const getList = async () => {
+  const res = await getProjectList('')
+  console.log(res.data)
+  list.value = res.data
+}
+onLoad(() => {
+  getList()
+})
 </script>
 
 <template>
-  <view class="card"
-    ><image
-      style="width: 40px; height: 40px"
-      src="https://qiniu-web-assets.dcloud.net.cn/unidoc/zh/unicloudlogo.png"
-      mode="scaleToFill"
-    /><view class="content"
-      ><text>{{ 'XX' }}小说</text> <text style="color: red">拉新结算{{ 'xx' }}人</text>
+  <view class="card" v-for="item in list" :key="item.id"
+    ><image style="width: 40px; height: 40px" :src="item.coverImage" mode="scaleToFill" /><view
+      class="content"
+      ><text>{{ item.name }}小说</text>
+      <text style="color: red">拉新结算{{ item.intro }}元/人</text>
     </view>
     <button
       type="primary"
@@ -27,6 +39,7 @@ const goKeyWords = () => {
 
 <style lang="scss">
 .card {
+  height: 100px;
   display: flex;
   padding: 10px;
   border-radius: 10px;

@@ -78,6 +78,36 @@
 			"style": {
 				"navigationBarTitleText": "announceDetails"
 			}
+		},
+		{
+			"path": "pages/my/bank/bank",
+			"style": {
+				"navigationBarTitleText": "bank"
+			}
+		},
+		{
+			"path": "pages/my/email/email",
+			"style": {
+				"navigationBarTitleText": "email"
+			}
+		},
+		{
+			"path": "pages/my/email/updateEmail/updateEmail",
+			"style": {
+				"navigationBarTitleText": "updateEmail"
+			}
+		},
+		{
+			"path": "pages/my/userAgreement/userAgreement",
+			"style": {
+				"navigationBarTitleText": "userAgreement"
+			}
+		},
+		{
+			"path": "pages/my/agreementSigned/agreementSigned",
+			"style": {
+				"navigationBarTitleText": "agreementSigned"
+			}
 		}
 	],
 	"globalStyle": {
@@ -108,8 +138,8 @@
 			{
 				"text": "数据",
 				"pagePath": "pages/figures/figures",
-				"iconPath": "static/tabs/cart_default.png",
-				"selectedIconPath": "static/tabs/cart_selected.png"
+				"iconPath": "static/tabs/data_default.png",
+				"selectedIconPath": "static/tabs/data_selected.png"
 			},
 			{
 				"text": "我的",

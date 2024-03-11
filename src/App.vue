@@ -15,7 +15,7 @@ onHide(() => {
 <style lang="scss">
 page {
   background-color: rgb(240, 240, 240);
-  padding: 2px 0px 10px;
+  padding: 5px 5px 5px 1px;
   position: relative;
 }
 view,

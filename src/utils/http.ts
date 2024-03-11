@@ -21,7 +21,7 @@ const httpInterceptor = {
     const meberStore = useMemberStore()
     const token = meberStore.profile?.token
     if (token) {
-      options.header.Authorization = token
+      options.header.token = 'Bearer ' + token
     }
   },
 }
@@ -31,12 +31,10 @@ uni.addInterceptor('uploadFile', httpInterceptor)
 interface Data<T> {
   code: Number
   msg: string
-  result: T
+  data: T
 }
 // 添加类型支持泛型
 export const http = <T>(options: UniApp.RequestOptions) => {
-  // console.log(options)
-
   return new Promise<Data<T>>((resolve, reject) => {
     uni.request({
       ...options,
