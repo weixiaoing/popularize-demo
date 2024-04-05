@@ -106,7 +106,7 @@ let register = async () => {
         <input
           placeholder="输入密码:包含数字,符号,字母,共8-16位"
           v-model="password"
-          type="safe-password"
+          password
           :maxlength="18"
         />
       </view>
@@ -114,12 +114,7 @@ let register = async () => {
     <view class="row-input">
       <text>确认密码</text>
       <view class="input-box">
-        <input
-          placeholder="再次输入登录密码"
-          v-model="secoundPassword"
-          type="safe-password"
-          :maxlength="18"
-        />
+        <input placeholder="再次输入登录密码" v-model="secoundPassword" password :maxlength="18" />
       </view>
     </view>
     <view class="row-input">

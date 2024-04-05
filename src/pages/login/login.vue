@@ -63,7 +63,7 @@ const goForget = () => {
     </view>
     <view class="row-input">
       <uni-icons type="eye-filled" size="24" />
-      <input type="safe-password" placeholder="请输入您的密码" :maxlength="18" v-model="password" />
+      <input password placeholder="请输入您的密码" :maxlength="18" v-model="password" />
     </view>
     <view class="login-btn" @click="login"> 确认登录 </view>
     <view class="function-link">

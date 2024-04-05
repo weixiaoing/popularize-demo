@@ -83,16 +83,11 @@ const updatePassword = async () => {
 
     <view class="row-input">
       <uni-icons type="eye-filled" size="24" />
-      <input type="safe-password" placeholder="输入新密码" :maxlength="18" v-model="password" />
+      <input password placeholder="输入新密码" :maxlength="18" v-model="password" />
     </view>
     <view class="row-input">
       <uni-icons type="eye-filled" size="24" />
-      <input
-        type="safe-password"
-        placeholder="请再次输入密码"
-        :maxlength="18"
-        v-model="secondPassword"
-      />
+      <input password placeholder="请再次输入密码" :maxlength="18" v-model="secondPassword" />
     </view>
     <view class="login-btn" @click="updatePassword"> <text>修改密码</text> </view>
   </view>
