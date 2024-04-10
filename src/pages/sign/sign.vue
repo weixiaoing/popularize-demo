@@ -11,6 +11,7 @@ let nickname = ref('')
 let secoundPassword = ref('')
 let flag = 0
 let MemberStore = useMemberStore()
+// 向后端发送验证码请求
 const delayGetCode = delayCode(async () => {
   const res = await getCodeAPI(email.value, 0)
   if (res.code == 200) {
@@ -21,6 +22,8 @@ const delayGetCode = delayCode(async () => {
     })
   }
 }, 10000)
+
+// 获取验证码
 let getCode = async () => {
   if (!email.value) {
     uni.showToast({
@@ -30,8 +33,11 @@ let getCode = async () => {
     })
     return
   }
+  // 发送验证码
   delayGetCode()
 }
+
+// 注册
 let register = async () => {
   if (!email.value || !password.value || !nickname.value || !secoundPassword.value) {
     uni.showToast({
@@ -63,6 +69,7 @@ let register = async () => {
       duration: 2000,
     })
   }
+  // 发送注册请求
   const res = await registerAPI(
     email.value,
     password.value,
@@ -76,7 +83,9 @@ let register = async () => {
       icon: 'success',
       duration: 2000,
     })
+    // 设置用户token
     MemberStore.setProfile({ token: res.data.token })
+    // 跳转公告页面
     uni.reLaunch({
       url: '/pages/announcement/announcement',
     })
@@ -105,9 +114,10 @@ let register = async () => {
       <view class="input-box">
         <input
           placeholder="输入密码:包含数字,符号,字母,共8-16位"
+          style="width: 100%"
           v-model="password"
           password
-          :maxlength="18"
+          :maxlength="16"
         />
       </view>
     </view>
@@ -123,7 +133,7 @@ let register = async () => {
         <input placeholder="请输入昵称,2-8个字符" v-model="nickname" :maxlength="10" />
       </view>
     </view>
-    <view class="register-btn" @click="register"> 注册 </view>
+    <view class="registerinput-box-btn" @click="register"> 注册 </view>
   </view>
 </template>
 

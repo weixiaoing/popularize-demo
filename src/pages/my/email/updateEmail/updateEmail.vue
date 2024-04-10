@@ -7,7 +7,9 @@ import { ref } from 'vue'
 let oldEmail = ref('')
 let newEmail = ref('')
 let code = ref('')
+// 确认
 const confirm = async () => {
+  // 发送更改邮箱请求
   const res = await updateEmail({
     oldEmail: oldEmail.value,
     newEmail: newEmail.value,
@@ -19,10 +21,13 @@ const confirm = async () => {
       icon: 'none',
       duration: 2000,
     })
+    // 跳转登录
     uni.reLaunch({ url: '/pages/login/login' })
   }
 }
+// 验证码
 const getCode = async () => {
+  // 发送验证码请求
   const res = await getCodeAPI(newEmail.value, 0)
   if (res.code == 200) {
     uni.showToast({
@@ -32,7 +37,9 @@ const getCode = async () => {
     })
   }
 }
-const delayGetCode = delayCode(getCode, 10000)
+//getcode函数30s调用一次
+const delayGetCode = delayCode(getCode, 30000)
+// 获取路由参数,赋值邮箱给老邮箱变量
 onLoad((options) => {
   oldEmail.value = options?.email
 })

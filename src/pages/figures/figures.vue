@@ -5,13 +5,17 @@ import { onLoad, onShow } from '@dcloudio/uni-app'
 import { ref } from 'vue'
 
 const earnList = ref<novelEaringType[]>([])
+// 获取数据列表
 const getList = async () => {
+  // 发送获取数据列表请求
   const res = await novelEaringAPI()
   earnList.value = res.data
 }
+// 跳转数据详情
 const goEarnDetails = (id: number) => {
   uni.navigateTo({ url: `/pages/keysData/keysData?id=${id}` })
 }
+// 展示前获取数据列表
 onShow(() => {
   getList()
 })

@@ -5,7 +5,9 @@ import { onLoad } from '@dcloudio/uni-app'
 import { ref } from 'vue'
 let code = ref('')
 let email = ref('')
+// 获取关键词
 const getCode = async () => {
+  // 请求
   const res = await getCodeAPI(email.value, 1)
   if (res.code == 200) {
     uni.showToast({
@@ -15,16 +17,20 @@ const getCode = async () => {
     })
   }
 }
-const delayGetCode = delayCode(getCode, 10000)
+// 30s请求
+const delayGetCode = delayCode(getCode, 30000)
+// 确认
 const confirm = async () => {
+  // 发送检验邮箱验证码请求
   const res = await testEmail({ email: email.value, code: code.value })
+  // 跳转到修改邮箱界面
   if (res.code == 200) {
     uni.navigateTo({ url: `/pages/my/email/updateEmail/updateEmail?email=${email.value}` })
   }
 }
+// 将路由参数中邮箱信息赋值给邮箱变量
 onLoad((options) => {
   email.value = options?.email
-  console.log(email.value)
 })
 </script>
 <template>

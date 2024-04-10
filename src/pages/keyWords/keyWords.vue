@@ -4,6 +4,7 @@ import type { keyDeatils } from '@/types'
 import { onShow } from '@dcloudio/uni-app'
 import { computed, onMounted, ref, watch } from 'vue'
 let list = ref<keyDeatils[]>([])
+// 计算是否展示变量
 let ifshow = computed(() => {
   if (list.value.length) {
     console.log('yes')
@@ -25,20 +26,25 @@ let range = ref([
   { value: 5, text: '已发布' },
   { value: 6, text: '已失效' },
 ])
+// 根据状态码显示不同的按钮
 const buttonType = (value: number) => {
   if ([1, 2, 5].includes(value)) return 'success '
   else return 'error'
 }
+// 搜索值改变时重新发送候选值请求
 const change = (value: number) => {
   selectedValue.value = value
   sendSearch()
 }
+// 关键词搜索
 const sendSearch = async () => {
   if (selectedValue.value === 0) {
+    // 选择全部类型时,发送关键词搜索请求
     const res = await searchKeyAPI({ keyName: searchValue.value, keyStatus: [0, 1, 2, 3, 4, 5] })
     list.value = res.data
   } else {
     let keyStatus = [selectedValue.value - 1]
+    // 选择什么类型,发送响应的请求参数
     const res = await searchKeyAPI({
       keyName: searchValue.value,
       keyStatus,
@@ -46,15 +52,15 @@ const sendSearch = async () => {
     list.value = res.data
   }
 }
-
+// 初始时,请求所有关键词
 onShow(() => {
   sendSearch()
 })
-
+// 跳转新建关键词页面
 const goKeyCreate = () => {
   uni.navigateTo({ url: '/pages/keyCreate/keyCreate' })
 }
-
+// 跳转关键词详情
 const goDetails = (id: number) => {
   uni.navigateTo({ url: `/pages/key/key?id=${id}` })
 }

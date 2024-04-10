@@ -5,29 +5,35 @@ import type { userType } from '@/types'
 import { onLoad, onShow } from '@dcloudio/uni-app'
 import { ref } from 'vue'
 let dialog = ref()
+// 开启弹窗
 const openDialog = () => {
   dialog.value.open()
 }
+// 获取全局用户信息
 const memberStore = useMemberStore()
 let userInfo = ref<userType>()
+// 弹窗
 const popShow = () => {
+  // 上传图片
   uni.chooseImage({
     sizeType: ['original', 'compressed'],
     sourceType: ['album', 'camera'],
     count: 1,
     success: ({ tempFilePaths, tempFiles }) => {
       console.log(tempFilePaths)
-
+      // 调用请求
       handleUploadFile('/file/uploadImg', tempFilePaths[0])
     },
   })
 }
+// 图片处理请求
 function handleUploadFile(url: string, filePath: string) {
   uni.uploadFile({
     url: url,
     filePath,
     name: 'file',
     formData: {},
+    // 设置请求头
     header: {
       token: 'Bearer:' + uni.getStorageSync('token'),
     },
@@ -57,29 +63,36 @@ function handleUploadFile(url: string, filePath: string) {
     },
   })
 }
-
+// 获取数据
 const getData = async () => {
+  // 发送请求用户信息
   const res = await getUserInfo()
   userInfo.value = res.data
   if (userInfo.value?.avatarUrl == null) {
     userInfo.value.avatarUrl = '/static/images/default.jpg'
   }
 }
+// 跳转银行信息页
 const goBank = () => {
   if (userInfo.value?.bankCard == null) {
     uni.navigateTo({ url: '/pages/my/bank/bank' })
   }
 }
+// 跳转邮箱
 const goEmail = () => {
   uni.navigateTo({ url: `/pages/my/email/email?email=${userInfo.value?.email}` })
 }
+// 跳转签约页
 const goSigned = () => {
   uni.navigateTo({ url: '/pages/my/agreementSigned/agreementSigned' })
 }
+// 跳转协议页
 const goAgreement = () => {
   uni.navigateTo({ url: '/pages/my/userAgreement/userAgreement' })
 }
+// 登出
 const logOut = async () => {
+  // 发送登出请求
   const res = await quitAPI()
   if (res.code == 200) {
     console.log(memberStore.profile)
@@ -94,7 +107,7 @@ const logOut = async () => {
     })
   }
 }
-
+// 初始化,调用获取数据函数
 onShow(() => {
   getData()
 })

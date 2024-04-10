@@ -1,3 +1,4 @@
+// 节流函数
 export const delayCode = (fn: Function, delay: number) => {
   let flag = 1
   let timeout: number

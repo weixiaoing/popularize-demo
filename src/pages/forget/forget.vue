@@ -6,8 +6,9 @@ let email = ref('')
 let password = ref('')
 let secondPassword = ref('')
 let code = ref('')
-
+// 验证码30s
 const delayGetCode = delayCode(async () => {
+  // 发送获取验证码请求
   const res = await getCodeAPI(email.value, 1)
   if (res.code == 200) {
     uni.showToast({
@@ -17,7 +18,7 @@ const delayGetCode = delayCode(async () => {
     })
   }
 }, 10000)
-
+// 获取验证码
 let getCode = async () => {
   if (!email.value) {
     uni.showToast({
@@ -27,8 +28,10 @@ let getCode = async () => {
     })
     return
   }
+  // 调用请求参数
   delayGetCode()
 }
+// 修改密码
 const updatePassword = async () => {
   if (!email.value || !password.value || !secondPassword.value || !code.value) {
     uni.showToast({
@@ -56,6 +59,7 @@ const updatePassword = async () => {
     })
     return
   }
+  // 发送修改密码请求
   const res = await updatePasswordAPI({
     email: email.value,
     password: password.value,
@@ -63,6 +67,7 @@ const updatePassword = async () => {
     code: code.value,
   })
   if (res.code === 200) {
+    // 请求成功后跳转
     uni.navigateTo({
       url: '/pages/login/login',
     })

@@ -28,6 +28,7 @@ const httpInterceptor = {
 uni.addInterceptor('request', httpInterceptor)
 uni.addInterceptor('uploadFile', httpInterceptor)
 
+// 数据泛型
 interface Data<T> {
   code: Number
   msg: string
@@ -38,7 +39,7 @@ export const http = <T>(options: UniApp.RequestOptions) => {
   return new Promise<Data<T>>((resolve, reject) => {
     uni.request({
       ...options,
-      // 请求成功0
+      // 请求成功
       success(res) {
         if (res.statusCode >= 200 && res.statusCode < 300 && (res.data as Data<T>).code == 200) {
           resolve(res.data as Data<T>)

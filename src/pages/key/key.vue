@@ -8,7 +8,9 @@ let popup = ref()
 let info = ref<keyDeatils>()
 let keyName = ref('')
 let workLink = ref('')
+// 发送回传函数
 const sendBack = async () => {
+  // 发送 发送回传请求
   const res = await postBack({
     keywordId: info.value?.id as number,
     name: keyName.value,
@@ -23,28 +25,33 @@ const sendBack = async () => {
     popup.value.close()
     keyName.value = ''
     workLink.value = ''
+    // 发送获取关键词详情数据,重新刷新页面
     const res = await getKeyDeatils(id.value)
     info.value = res.data
   }
 }
+// 取消关键词
 const keyCancel = async () => {
+  // 发送取消关键词请求
   const res = await postCancel(String(info.value?.id))
   if (res.code == 200) {
     uni.navigateBack({ delta: 1 })
   }
 }
-
+// 将状态码转换成文字
 const getStatus = (status?: number) => {
   let statusList = ['审核中', '已通过', '已驳回', '已取消', '已发布', '已失效']
   return statusList[status as number]
 }
-
+// 打开弹窗
 const popShow = () => {
   popup.value.open()
 }
+// 启动时,获取路由参数并赋值给key id
 onLoad(async (options) => {
   id.value = options?.id
 })
+// 展示时,发送获取关键词详情请求
 onShow(async () => {
   const res = await getKeyDeatils(id.value)
   info.value = res.data

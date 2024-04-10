@@ -11,18 +11,21 @@ let key = ref<keyWord>({
 })
 let selected = ref('')
 let bookList = ref<string[]>([])
-
+// 获取数据列表
 const getBookList = async () => {
+  // 发送请求
   const res = await getProjectList('')
   bookList.value = res.data.map((item) => {
     return item.id + ': ' + item.name
   })
 }
-
+// 启动时调用获取数据列表函数
 onLoad(() => {
   getBookList()
 })
+// 提交函数
 const submit = async () => {
+  // 切割书籍id和名称
   key.value.bookId = Number(selected.value.split(': ')[0])
   key.value.bookName = selected.value.split(' ')[1]
   if (key.value.bookName.length == 0 || key.value.keyWord.length == 0) {
@@ -41,7 +44,7 @@ const submit = async () => {
     })
     return
   }
-
+  // 发送创建关键词请求
   const res = await createKeyAPI([key.value])
   if (res.code == 200) {
     uni.showToast({

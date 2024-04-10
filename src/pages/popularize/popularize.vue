@@ -4,17 +4,19 @@ import type { novelEaringType, novelPopularizeType } from '@/types'
 import { onLoad } from '@dcloudio/uni-app'
 import { ref } from 'vue'
 
-//
-
+// 跳转关键词详情
 const goKeyWords = () => {
   uni.navigateTo({ url: '/pages/keyWords/keyWords' })
 }
 let list = ref<novelPopularizeType[]>([])
+// 获取推广列表
 const getList = async () => {
+  // 发送获取推广列表请求
   const res = await getProjectList('')
   console.log(res.data)
   list.value = res.data
 }
+// 初始化时调用获取推广列表函数
 onLoad(() => {
   getList()
 })

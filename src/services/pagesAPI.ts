@@ -8,13 +8,14 @@ import type {
 } from '@/types'
 import { http } from '../utils/http'
 import keyWords from '@/pages/keyWords/keyWords.vue'
+// 获取公告列表
 export const getNoticeList = () => {
   return http<notice[]>({
     url: '/notice/list',
     method: 'GET',
   })
 }
-
+// 公告详情
 export const getNotice = ({ id }: { id: number }) => {
   return http<{ content: string }>({
     url: `/notice/${id}`,

@@ -5,7 +5,9 @@ import { onShow } from '@dcloudio/uni-app'
 import { ref } from 'vue'
 
 let info = ref<userType>()
+// 签约
 const goSigned = async () => {
+  // 发送签约请求
   const res = await getSigned()
   if (res.code == 200) {
     uni.showToast({
@@ -13,11 +15,15 @@ const goSigned = async () => {
       icon: 'none',
       duration: 2000,
     })
+    // 请求成功,回退
     uni.navigateBack({ delta: 1 })
   }
 }
+// 初始化,获取用户信息
 onShow(async () => {
+  // 获取用户信息请求
   const res = await getUserInfo()
+  // 赋值
   info.value = res.data
 })
 </script>

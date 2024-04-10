@@ -81,7 +81,7 @@ export const uploadImagesAPI = (file: any) => {
     data: file,
   })
 }
-
+// 获取用户信息
 export const getUserInfo = () => {
   return http<userType>({
     url: '/user/info',

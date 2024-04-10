@@ -1,3 +1,4 @@
+// 各种类型文件
 export type notice = {
   id: number
   userId: number

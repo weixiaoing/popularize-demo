@@ -8,7 +8,9 @@ let bankName = ref('')
 let cardNumber = ref('')
 let phoneNumber = ref('')
 let province = ref('')
+// 获取银行信息
 const getbankInfo = async () => {
+  // 获取信息请求
   const res = await getBankAPI()
   if (res.code == 200) {
     bankAddress.value == res.data.bankAddress
@@ -18,7 +20,9 @@ const getbankInfo = async () => {
     province.value = res.data.province
   }
 }
+// 提交
 const submit = async () => {
+  // 更新银行信息请求
   const res = await updateBankAPI({
     bankAddress: bankAddress.value,
     bankName: bankName.value,
@@ -50,6 +54,7 @@ const submit = async () => {
     uni.navigateBack({ delta: 1 })
   }
 }
+// 初始获取银行信息
 onShow(() => {
   getbankInfo()
 })

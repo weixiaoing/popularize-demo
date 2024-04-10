@@ -5,10 +5,10 @@ import { ref } from 'vue'
 
 let email = ref('')
 let password = ref('')
-
+// 获取全局用户信息
 const MemberStore = useMemberStore()
 MemberStore.setProfile(null)
-
+// 登录
 const login = async () => {
   if (!email.value) {
     uni.showToast({
@@ -26,9 +26,10 @@ const login = async () => {
     })
     return
   }
-
+  // 发送登录请求
   const res = await loginAPI(email.value, password.value)
   if (res.code === 200) {
+    // 设置用户token,跳转公告页面
     MemberStore.setProfile(res.data)
     uni.reLaunch({
       url: '/pages/announcement/announcement',
@@ -40,13 +41,13 @@ const login = async () => {
     })
   }
 }
-
+// 跳转注册
 const goregister = () => {
   uni.navigateTo({
     url: '/pages/sign/sign',
   })
 }
-
+// 跳转忘记密码
 const goForget = () => {
   uni.navigateTo({
     url: '/pages/forget/forget',

@@ -6,13 +6,16 @@ import { ref } from 'vue'
 let bookId = ref(0)
 let loading = ref(false)
 let keyEarns = ref<keyEarnType[]>([])
+// 搜索框改变时调用关键词搜索函数
 const dateChange = () => {
   keySearch()
 }
 let range = ref<string[]>([])
 let keyName = ref('')
+// 关键词收益列表搜索
 const keySearch = async () => {
   loading.value = true
+  // 发送获取关键词收益请求
   const res = await keyEarnAPI({
     id: bookId.value,
     name: keyName.value,
@@ -22,12 +25,12 @@ const keySearch = async () => {
   keyEarns.value = res.data
   loading.value = false
 }
-
+// 启动时,获取路由中的参数,赋值给书籍id,然后发送关键词收益列表请求
 onLoad((options) => {
   bookId.value = options?.id
   keySearch()
 })
-
+// 计算拉新数
 const sumData = (arr: Array<number>) => {
   var s = 0
   arr.forEach(function (val, idx, arr) {
